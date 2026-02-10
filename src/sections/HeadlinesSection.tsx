@@ -55,11 +55,11 @@ export const HeadlinesSection = memo(function HeadlinesSection({
   // Sort articles
   const sortedArticles = React.useMemo(() => {
     if (sortBy === 'newest') {
-      return [...articles].sort((a, b) => 
+      return [...articles].sort((a, b) =>
         new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime()
       );
     }
-    return [...articles].sort((a, b) => 
+    return [...articles].sort((a, b) =>
       new Date(a.publishedAt).getTime() - new Date(b.publishedAt).getTime()
     );
   }, [articles, sortBy]);
@@ -70,8 +70,8 @@ export const HeadlinesSection = memo(function HeadlinesSection({
 
   if (error) {
     return (
-      <EmptyState 
-        type="error" 
+      <EmptyState
+        type="error"
         onAction={refresh}
         message={error}
       />
@@ -103,7 +103,7 @@ export const HeadlinesSection = memo(function HeadlinesSection({
               {sortedArticles.length} noticias
             </span>
           </div>
-          
+
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button
@@ -129,7 +129,7 @@ export const HeadlinesSection = memo(function HeadlinesSection({
         </div>
 
         {/* News Grid */}
-        <div className="px-4 space-y-4">
+        <div className="px-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {sortedArticles.map((article, index) => (
             <NewsCard
               key={article.id}
@@ -143,9 +143,7 @@ export const HeadlinesSection = memo(function HeadlinesSection({
 
           {/* Loading Skeletons */}
           {loading && (
-            <div className="space-y-4">
-              <SkeletonCard count={2} />
-            </div>
+            <SkeletonCard count={3} />
           )}
 
           {/* Load More Sentinel */}
@@ -162,8 +160,8 @@ export const HeadlinesSection = memo(function HeadlinesSection({
 
           {/* Empty State */}
           {!loading && sortedArticles.length === 0 && (
-            <EmptyState 
-              type="no-results" 
+            <EmptyState
+              type="no-results"
               onAction={refresh}
             />
           )}

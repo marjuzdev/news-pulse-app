@@ -41,8 +41,8 @@ export const FavoritesSection = memo(function FavoritesSection({
   // Show empty state if no favorites
   if (favorites.length === 0) {
     return (
-      <EmptyState 
-        type="no-favorites" 
+      <EmptyState
+        type="no-favorites"
         onAction={onExploreNews}
       />
     );
@@ -81,7 +81,7 @@ export const FavoritesSection = memo(function FavoritesSection({
                 ¿Eliminar todos los favoritos?
               </AlertDialogTitle>
               <AlertDialogDescription className="text-slate-500 dark:text-slate-400">
-                Esta acción eliminará permanentemente {favorites.length} noticias guardadas. 
+                Esta acción eliminará permanentemente {favorites.length} noticias guardadas.
                 Esta acción no se puede deshacer.
               </AlertDialogDescription>
             </AlertDialogHeader>
@@ -108,7 +108,7 @@ export const FavoritesSection = memo(function FavoritesSection({
       </div>
 
       {/* Favorites List */}
-      <div className="px-4 space-y-3">
+      <div className="px-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {favorites.map((item, index) => (
           <FavoriteCard
             key={item.id}

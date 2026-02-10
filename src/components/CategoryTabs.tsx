@@ -1,4 +1,5 @@
 import { memo } from 'react';
+import { Layers, Globe, Briefcase, Film, Activity, FlaskConical, Trophy, Cpu } from 'lucide-react';
 import type { NewsCategory } from '@/types';
 
 interface CategoryTabsProps {
@@ -6,15 +7,15 @@ interface CategoryTabsProps {
   onCategoryChange: (category: NewsCategory | 'all') => void;
 }
 
-const CATEGORIES: { value: NewsCategory | 'all'; label: string; icon: string }[] = [
-  { value: 'all', label: 'Todas', icon: '📰' },
-  { value: 'general', label: 'General', icon: '🌍' },
-  { value: 'business', label: 'Negocios', icon: '💼' },
-  { value: 'entertainment', label: 'Entretenimiento', icon: '🎬' },
-  { value: 'health', label: 'Salud', icon: '🏥' },
-  { value: 'science', label: 'Ciencia', icon: '🔬' },
-  { value: 'sports', label: 'Deportes', icon: '⚽' },
-  { value: 'technology', label: 'Tecnología', icon: '💻' },
+const CATEGORIES: { value: NewsCategory | 'all'; label: string; icon: React.ElementType }[] = [
+  { value: 'all', label: 'Todas', icon: Layers },
+  { value: 'general', label: 'General', icon: Globe },
+  { value: 'business', label: 'Negocios', icon: Briefcase },
+  { value: 'entertainment', label: 'Entretenimiento', icon: Film },
+  { value: 'health', label: 'Salud', icon: Activity },
+  { value: 'science', label: 'Ciencia', icon: FlaskConical },
+  { value: 'sports', label: 'Deportes', icon: Trophy },
+  { value: 'technology', label: 'Tecnología', icon: Cpu },
 ];
 
 export const CategoryTabs = memo(function CategoryTabs({
@@ -22,30 +23,31 @@ export const CategoryTabs = memo(function CategoryTabs({
   onCategoryChange,
 }: CategoryTabsProps) {
   return (
-    <div className="sticky top-14 z-40 w-full backdrop-blur-xl bg-white/90 dark:bg-slate-900/90 border-b border-slate-200 dark:border-slate-800">
-      <div className="overflow-x-auto scrollbar-hide">
-        <div className="flex items-center gap-1 px-4 py-3 min-w-max">
+    <div className="sticky top-14 z-40 w-full backdrop-blur-xl bg-white/80 dark:bg-slate-900/80 border-b border-slate-200/50 dark:border-slate-800/50 transition-all duration-300 supports-[backdrop-filter]:bg-white/60">
+      <div className="overflow-x-auto scrollbar-hide md:overflow-visible py-2">
+        <div className="flex items-center gap-2 px-4 min-w-max md:justify-center md:flex-wrap md:min-w-0 max-w-7xl mx-auto">
           {CATEGORIES.map((cat) => {
             const isActive = activeCategory === cat.value;
+            const Icon = cat.icon;
             return (
               <button
                 key={cat.value}
                 onClick={() => onCategoryChange(cat.value)}
                 className={`
-                  relative flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium
-                  transition-all duration-200 whitespace-nowrap active:scale-95
-                  ${isActive 
-                    ? 'bg-blue-500 text-white shadow-md shadow-blue-500/25' 
-                    : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800'
+                  relative flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-sm font-medium
+                  transition-all duration-300 whitespace-nowrap active:scale-95 ring-offset-2 ring-offset-white dark:ring-offset-slate-950 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500
+                  ${isActive
+                    ? 'bg-blue-600 text-white shadow-lg shadow-blue-500/25 ring-0'
+                    : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-slate-200'
                   }
                 `}
               >
-                <span className="text-base">{cat.icon}</span>
+                <Icon className={`w-4 h-4 transition-transform duration-300 ${isActive ? 'scale-110' : ''}`} />
                 <span>{cat.label}</span>
-                
+
                 {/* Active indicator animation */}
                 {isActive && (
-                  <span className="absolute inset-0 rounded-full bg-white/20 animate-pulse" />
+                  <span className="absolute inset-0 rounded-full bg-white/10 animate-pulse duration-1000" />
                 )}
               </button>
             );

@@ -43,8 +43,8 @@ export const ForYouSection = memo(function ForYouSection({
   // Show empty state if no interests selected
   if (interests.length === 0) {
     return (
-      <EmptyState 
-        type="empty-feed" 
+      <EmptyState
+        type="empty-feed"
         onAction={onConfigureInterests}
       />
     );
@@ -76,7 +76,7 @@ export const ForYouSection = memo(function ForYouSection({
       </div>
 
       {/* News Grid */}
-      <div className="px-4 space-y-4">
+      <div className="px-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {articles.map((article, index) => (
           <NewsCard
             key={article.id}
@@ -90,9 +90,7 @@ export const ForYouSection = memo(function ForYouSection({
 
         {/* Loading Skeletons */}
         {loading && (
-          <div className="space-y-4">
-            <SkeletonCard count={2} />
-          </div>
+          <SkeletonCard count={3} />
         )}
 
         {/* Load More Sentinel */}
@@ -109,8 +107,8 @@ export const ForYouSection = memo(function ForYouSection({
 
         {/* Empty State */}
         {!loading && articles.length === 0 && (
-          <EmptyState 
-            type="no-results" 
+          <EmptyState
+            type="no-results"
             onAction={handleRefresh}
           />
         )}

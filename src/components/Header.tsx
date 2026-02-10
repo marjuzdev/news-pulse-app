@@ -1,19 +1,19 @@
 import { memo } from 'react';
-import { Sun, Moon, Settings, Newspaper } from 'lucide-react';
+import { Sun, Moon, Settings, Newspaper, Globe, Briefcase, Film, Activity, FlaskConical, Trophy, Cpu } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
 import type { NewsCategory } from '@/types';
 
-const CATEGORIES: { value: NewsCategory; label: string; icon: string }[] = [
-  { value: 'general', label: 'General', icon: '📰' },
-  { value: 'business', label: 'Negocios', icon: '💼' },
-  { value: 'entertainment', label: 'Entretenimiento', icon: '🎬' },
-  { value: 'health', label: 'Salud', icon: '🏥' },
-  { value: 'science', label: 'Ciencia', icon: '🔬' },
-  { value: 'sports', label: 'Deportes', icon: '⚽' },
-  { value: 'technology', label: 'Tecnología', icon: '💻' },
+const CATEGORIES: { value: NewsCategory; label: string; icon: React.ElementType }[] = [
+  { value: 'general', label: 'General', icon: Globe },
+  { value: 'business', label: 'Negocios', icon: Briefcase },
+  { value: 'entertainment', label: 'Entretenimiento', icon: Film },
+  { value: 'health', label: 'Salud', icon: Activity },
+  { value: 'science', label: 'Ciencia', icon: FlaskConical },
+  { value: 'sports', label: 'Deportes', icon: Trophy },
+  { value: 'technology', label: 'Tecnología', icon: Cpu },
 ];
 
 interface HeaderProps {
@@ -55,15 +55,13 @@ export const Header = memo(function Header({
             aria-label={isDark ? 'Cambiar a modo claro' : 'Cambiar a modo oscuro'}
           >
             <div className="relative w-5 h-5">
-              <Sun 
-                className={`absolute inset-0 w-5 h-5 text-amber-500 transition-all duration-300 ${
-                  isDark ? 'opacity-0 rotate-90 scale-0' : 'opacity-100 rotate-0 scale-100'
-                }`} 
+              <Sun
+                className={`absolute inset-0 w-5 h-5 text-amber-500 transition-all duration-300 ${isDark ? 'opacity-0 rotate-90 scale-0' : 'opacity-100 rotate-0 scale-100'
+                  }`}
               />
-              <Moon 
-                className={`absolute inset-0 w-5 h-5 text-indigo-400 transition-all duration-300 ${
-                  isDark ? 'opacity-100 rotate-0 scale-100' : 'opacity-0 -rotate-90 scale-0'
-                }`} 
+              <Moon
+                className={`absolute inset-0 w-5 h-5 text-indigo-400 transition-all duration-300 ${isDark ? 'opacity-100 rotate-0 scale-100' : 'opacity-0 -rotate-90 scale-0'
+                  }`}
               />
             </div>
           </Button>
@@ -80,27 +78,29 @@ export const Header = memo(function Header({
                 <Settings className="w-5 h-5 text-slate-600 dark:text-slate-400" />
               </Button>
             </SheetTrigger>
-            <SheetContent className="w-full sm:max-w-md bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800">
-              <SheetHeader>
-                <SheetTitle className="text-slate-900 dark:text-white">
+            <SheetContent className="w-full sm:max-w-md bg-white/95 dark:bg-slate-900/95 border-l border-slate-200 dark:border-slate-800 backdrop-blur-xl p-0 gap-0 flex flex-col h-full shadow-2xl">
+              <SheetHeader className="px-6 py-5 border-b border-slate-100 dark:border-slate-800/50 flex-shrink-0">
+                <SheetTitle className="text-slate-900 dark:text-white font-bold text-xl tracking-tight">
                   Configuración
                 </SheetTitle>
               </SheetHeader>
-              
-              <div className="mt-6 space-y-6">
+
+              <div className="flex-1 overflow-y-auto px-6 py-6 space-y-8">
                 {/* Theme Section */}
                 <div className="space-y-3">
-                  <h3 className="text-sm font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider">
+                  <h3 className="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest pl-1">
                     Apariencia
                   </h3>
-                  <div className="flex items-center justify-between p-3 rounded-lg bg-slate-50 dark:bg-slate-800/50">
+                  <div className="flex items-center justify-between p-3.5 rounded-xl bg-slate-50/80 dark:bg-slate-800/40 border border-slate-100 dark:border-slate-700/50 transition-colors hover:border-slate-200 dark:hover:border-slate-700">
                     <div className="flex items-center gap-3">
-                      {isDark ? (
-                        <Moon className="w-5 h-5 text-indigo-400" />
-                      ) : (
-                        <Sun className="w-5 h-5 text-amber-500" />
-                      )}
-                      <Label htmlFor="theme-toggle" className="text-slate-700 dark:text-slate-300 cursor-pointer">
+                      <div className="p-2 rounded-full bg-white dark:bg-slate-800 shadow-sm border border-slate-100 dark:border-slate-700">
+                        {isDark ? (
+                          <Moon className="w-4 h-4 text-indigo-400" />
+                        ) : (
+                          <Sun className="w-4 h-4 text-amber-500" />
+                        )}
+                      </div>
+                      <Label htmlFor="theme-toggle" className="text-slate-700 dark:text-slate-200 cursor-pointer font-medium">
                         Modo oscuro
                       </Label>
                     </div>
@@ -114,29 +114,33 @@ export const Header = memo(function Header({
 
                 {/* Interests Section */}
                 <div className="space-y-3">
-                  <h3 className="text-sm font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider">
-                    Tus intereses
-                  </h3>
-                  <p className="text-xs text-slate-500 dark:text-slate-500">
-                    Selecciona las categorías que te interesan para personalizar tu feed
-                  </p>
-                  <div className="flex flex-wrap gap-2">
+                  <div className="space-y-1 pl-1">
+                    <h3 className="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest">
+                      Tus intereses
+                    </h3>
+                    <p className="text-xs text-slate-500 dark:text-slate-500">
+                      Personaliza tu feed seleccionando las categorías
+                    </p>
+                  </div>
+
+                  <div className="flex flex-wrap gap-2 pt-1">
                     {CATEGORIES.map((cat) => {
                       const isSelected = interests.includes(cat.value);
+                      const Icon = cat.icon;
                       return (
                         <button
                           key={cat.value}
                           onClick={() => onToggleInterest(cat.value)}
                           className={`
-                            inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-medium
+                            inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-medium border
                             transition-all duration-200 active:scale-95
-                            ${isSelected 
-                              ? 'bg-blue-500 text-white shadow-md shadow-blue-500/25' 
-                              : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-700'
+                            ${isSelected
+                              ? 'bg-blue-600 border-blue-600 text-white shadow-md shadow-blue-500/20'
+                              : 'bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-400 hover:border-slate-300 dark:hover:border-slate-600 hover:bg-slate-50 dark:hover:bg-slate-700/50'
                             }
                           `}
                         >
-                          <span>{cat.icon}</span>
+                          <Icon className={`w-3.5 h-3.5 ${isSelected ? 'animate-pulse' : ''}`} />
                           <span>{cat.label}</span>
                         </button>
                       );
@@ -145,25 +149,25 @@ export const Header = memo(function Header({
                 </div>
 
                 {/* Stats Section */}
-                <div className="space-y-3">
-                  <h3 className="text-sm font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider">
+                <div className="space-y-2.5">
+                  <h3 className="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest pl-1">
                     Estadísticas
                   </h3>
                   <div className="grid grid-cols-2 gap-3">
-                    <div className="p-3 rounded-lg bg-slate-50 dark:bg-slate-800/50">
-                      <div className="text-2xl font-bold text-slate-900 dark:text-white">
+                    <div className="p-4 rounded-xl bg-slate-50/80 dark:bg-slate-800/40 border border-slate-100 dark:border-slate-700/50">
+                      <div className="text-2xl font-bold text-slate-900 dark:text-white mb-1">
                         {interests.length}
                       </div>
-                      <div className="text-xs text-slate-500 dark:text-slate-500">
-                        Categorías seguidas
+                      <div className="text-[10px] font-medium text-slate-500 dark:text-slate-500 uppercase tracking-wider">
+                        Categorías
                       </div>
                     </div>
-                    <div className="p-3 rounded-lg bg-slate-50 dark:bg-slate-800/50">
-                      <div className="text-2xl font-bold text-slate-900 dark:text-white">
+                    <div className="p-4 rounded-xl bg-slate-50/80 dark:bg-slate-800/40 border border-slate-100 dark:border-slate-700/50">
+                      <div className="text-2xl font-bold text-slate-900 dark:text-white mb-1">
                         {favoritesCount}
                       </div>
-                      <div className="text-xs text-slate-500 dark:text-slate-500">
-                        Favoritos guardados
+                      <div className="text-[10px] font-medium text-slate-500 dark:text-slate-500 uppercase tracking-wider">
+                        Favoritos
                       </div>
                     </div>
                   </div>

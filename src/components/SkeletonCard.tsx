@@ -9,34 +9,36 @@ export const SkeletonCard = memo(function SkeletonCard({ count = 1 }: SkeletonCa
   return (
     <>
       {Array.from({ length: count }, (_, i) => (
-        <div 
-          key={i} 
-          className="bg-white dark:bg-slate-800/50 rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-700/50"
+        <div
+          key={i}
+          className="bg-white dark:bg-slate-800/50 rounded-xl overflow-hidden border border-slate-100 dark:border-slate-800 flex flex-col h-full"
         >
-          {/* Image Skeleton */}
-          <Skeleton className="aspect-video w-full" />
-          
+          {/* Image Skeleton - Fixed height matching NewsCard */}
+          <Skeleton className="h-48 w-full shrink-0" />
+
           {/* Content Skeleton */}
-          <div className="p-4 space-y-3">
-            {/* Source & Time */}
-            <div className="flex items-center gap-2">
-              <Skeleton className="h-3 w-20" />
-              <Skeleton className="h-3 w-3 rounded-full" />
-              <Skeleton className="h-3 w-16" />
+          <div className="p-4 flex flex-col flex-1 gap-3">
+            {/* Header: Source & Time (Top) */}
+            <div className="flex items-center gap-2.5">
+              <Skeleton className="h-5 w-5 rounded-full" />
+              <div className="space-y-1">
+                <Skeleton className="h-2.5 w-20" />
+              </div>
             </div>
-            
-            {/* Title */}
-            <Skeleton className="h-5 w-full" />
-            <Skeleton className="h-5 w-3/4" />
-            
-            {/* Description */}
-            <Skeleton className="h-4 w-full" />
-            <Skeleton className="h-4 w-2/3" />
-            
-            {/* Actions */}
-            <div className="flex items-center justify-between pt-2">
-              <Skeleton className="h-8 w-24" />
-              <Skeleton className="h-8 w-20" />
+
+            {/* Title - Larger */}
+            <div className="space-y-2">
+              <Skeleton className="h-5 w-full" />
+              <Skeleton className="h-5 w-full" />
+              <Skeleton className="h-5 w-2/3" />
+            </div>
+
+            {/* NO Description in this design to match clean look */}
+
+            {/* Actions - Bottom Right */}
+            <div className="mt-auto flex items-center justify-end pt-2 gap-1">
+              <Skeleton className="h-8 w-8 rounded-full" />
+              <Skeleton className="h-8 w-8 rounded-full" />
             </div>
           </div>
         </div>
