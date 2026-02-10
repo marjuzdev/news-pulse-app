@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+    <meta name="theme-color" content="#0f172a" />
+    <meta name="background-color" content="#0f172a" />
+    <meta name="description" content="Aplicación de noticias personalizadas con PWA" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="News Pulse" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="format-detection" content="telephone=no" />
+    
+    <!-- Icons -->
+    <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192x192.png" />
+    <link rel="apple-touch-icon" sizes="192x192" href="icons/icon-192x192.png" />
+    <link rel="apple-touch-icon" sizes="512x512" href="icons/icon-512x512.png" />
+    
+    <!-- Splash Screen for iOS -->
+    <link rel="apple-touch-startup-image" href="icons/icon-512x512.png" />
+    
+    <title>News Pulse - Noticias Personalizadas</title>
+    
+    <style>
+      /* Critical CSS for instant dark mode */
+      html.dark { background-color: #0f172a; }
+      html { background-color: #ffffff; }
+      body { margin: 0; padding: 0; }
+      #root { min-height: 100vh; }
+      
+      /* Prevent FOUC */
+      .loading-screen {
+        position: fixed;
+        inset: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #0f172a;
+        z-index: 9999;
+        transition: opacity 0.3s ease;
+      }
+      .loading-screen.hidden { opacity: 0; pointer-events: none; }
+      .loading-spinner {
+        width: 40px;
+        height: 40px;
+        border: 3px solid rgba(255,255,255,0.1);
+        border-top-color: #3b82f6;
+        border-radius: 50%;
+        animation: spin 0.8s linear infinite;
+      }
+      @keyframes spin { to { transform: rotate(360deg); } }
+    </style>
+    
+    <script>
+      // Apply theme immediately to prevent FOUC
+      (function() {
+        const savedTheme = localStorage.getItem('theme');
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        const theme = savedTheme || (prefersDark ? 'dark' : 'light');
+        if (theme === 'dark') {
+          document.documentElement.classList.add('dark');
+          document.documentElement.style.backgroundColor = '#0f172a';
+        }
+      })();
+    </script>
+  </head>
+  <body>
+    <div id="loading-screen" class="loading-screen">
+      <div class="loading-spinner"></div>
+    </div>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
