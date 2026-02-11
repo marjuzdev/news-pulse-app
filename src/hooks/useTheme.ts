@@ -28,12 +28,8 @@ export function useTheme() {
     const root = document.documentElement;
     if (isDark) {
       root.classList.add('dark');
-      root.style.backgroundColor = '#0f172a';
-      document.body.style.backgroundColor = '#0f172a';
     } else {
       root.classList.remove('dark');
-      root.style.backgroundColor = '#ffffff';
-      document.body.style.backgroundColor = '#ffffff';
     }
   }, [isDark]);
 

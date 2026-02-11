@@ -224,10 +224,11 @@ function App() {
         position="top-center"
         toastOptions={{
           style: {
-            background: isDark ? '#1e293b' : '#ffffff',
-            color: isDark ? '#ffffff' : '#0f172a',
-            border: `1px solid ${isDark ? '#334155' : '#e2e8f0'}`,
+            background: 'var(--popover)',
+            color: 'var(--foreground)',
+            border: '1px solid var(--border)',
           },
+          descriptionClassName: 'text-slate-500 dark:text-slate-400',
         }}
       />
     </div>

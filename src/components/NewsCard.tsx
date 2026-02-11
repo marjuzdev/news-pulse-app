@@ -148,7 +148,7 @@ export const NewsCard = memo(function NewsCard({
             <div className="w-5 h-5 rounded-md bg-slate-100 dark:bg-slate-800 flex items-center justify-center overflow-hidden border border-slate-200 dark:border-slate-700/50">
               <span className="text-[10px] font-bold text-slate-500 uppercase">{article.source.name.charAt(0)}</span>
             </div>
-            <span className="text-[11px] font-semibold text-slate-500 dark:text-slate-400 truncate max-w-[150px]">
+            <span className="text-[11px] font-semibold text-slate-600 dark:text-slate-300 truncate max-w-[150px]">
               {article.source.name}
             </span>
           </div>
@@ -180,7 +180,7 @@ export const NewsCard = memo(function NewsCard({
         </h3>
 
         {/* Meta Info */}
-        <div className="mt-auto flex items-center gap-2 text-[12px] text-slate-500 dark:text-slate-400 font-medium">
+        <div className="mt-auto flex items-center gap-2 text-[12px] text-slate-600 dark:text-slate-300 font-medium">
           <span className="whitespace-nowrap">{formatTimeAgo(article.publishedAt)}</span>
           <span className="w-1 h-1 rounded-full bg-slate-300 dark:bg-slate-700" />
           <span className="text-blue-600/90 dark:text-blue-400/90 uppercase tracking-tight text-[11px] font-bold">{categoryLabel}</span>

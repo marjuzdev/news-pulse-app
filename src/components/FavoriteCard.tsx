@@ -96,7 +96,7 @@ export const FavoriteCard = memo(function FavoriteCard({
 
         {/* Description */}
         {item.description && (
-          <p className="text-[12px] text-slate-500 dark:text-slate-400 line-clamp-2 mb-3 leading-relaxed">
+          <p className="text-[12px] text-slate-600 dark:text-slate-300 line-clamp-2 mb-3 leading-relaxed">
             {item.description}
           </p>
         )}
