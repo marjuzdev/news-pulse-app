@@ -1,7 +1,7 @@
 import { useState, useCallback, useEffect, Suspense, lazy } from 'react';
 import { Toaster } from '@/components/ui/sonner';
 import { toast } from 'sonner';
-import { Header, BottomNav, ScrollToTopButton } from '@/components';
+import { Header, BottomNav, ScrollToTopButton, Sidebar } from '@/components';
 import { useTheme, useFavorites, useUserPreferences, useScrollToTop } from '@/hooks';
 import type { TabType, NewsArticle } from '@/types';
 import './App.css';
@@ -20,7 +20,7 @@ const SectionLoader = () => (
 
 function App() {
   const [activeTab, setActiveTab] = useState<TabType>('foryou');
-  
+
   const { isDark, toggleTheme } = useTheme();
   const { favorites, favoritesCount, isFavorite, toggleFavorite, removeFavorite, clearAllFavorites } = useFavorites();
   const { interests, toggleInterest } = useUserPreferences();
@@ -31,7 +31,7 @@ function App() {
     // Check if running as Capacitor app or mobile
     const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
     const isStandalone = window.matchMedia('(display-mode: standalone)').matches;
-    
+
     if (isMobile && isStandalone) {
       // In PWA standalone mode on mobile, try to open in system browser
       try {
@@ -118,45 +118,58 @@ function App() {
         favoritesCount={favoritesCount}
       />
 
-      {/* Main Content */}
-      <main className="pt-0 pb-24">
-        <Suspense fallback={<SectionLoader />}>
-          {activeTab === 'foryou' && (
-            <ForYouSection
-              interests={interests}
-              isFavorite={isFavorite}
-              onToggleFavorite={handleToggleFavorite}
-              onOpenArticle={handleOpenArticle}
-              onConfigureInterests={handleConfigureInterests}
-            />
-          )}
-          
-          {activeTab === 'headlines' && (
-            <HeadlinesSection
-              isFavorite={isFavorite}
-              onToggleFavorite={handleToggleFavorite}
-              onOpenArticle={handleOpenArticle}
-            />
-          )}
-          
-          {activeTab === 'favorites' && (
-            <FavoritesSection
-              favorites={favorites}
-              onRemove={removeFavorite}
-              onClearAll={handleClearAllFavorites}
-              onOpenArticle={handleOpenArticle}
-              onExploreNews={handleExploreNews}
-            />
-          )}
-        </Suspense>
-      </main>
+      <div className="flex flex-row">
+        {/* Sidebar for Desktop */}
+        <div className="hidden lg:block">
+          <Sidebar
+            activeTab={activeTab}
+            onTabChange={handleTabChange}
+            favoritesCount={favoritesCount}
+          />
+        </div>
 
-      {/* Bottom Navigation */}
-      <BottomNav
-        activeTab={activeTab}
-        onTabChange={handleTabChange}
-        favoritesCount={favoritesCount}
-      />
+        {/* Main Content */}
+        <main className="flex-1 lg:pt-14 pb-20 lg:pb-8 lg:ml-[72px] xl:ml-64">
+          <Suspense fallback={<SectionLoader />}>
+            {activeTab === 'foryou' && (
+              <ForYouSection
+                interests={interests}
+                isFavorite={isFavorite}
+                onToggleFavorite={handleToggleFavorite}
+                onOpenArticle={handleOpenArticle}
+                onConfigureInterests={handleConfigureInterests}
+              />
+            )}
+
+            {activeTab === 'headlines' && (
+              <HeadlinesSection
+                isFavorite={isFavorite}
+                onToggleFavorite={handleToggleFavorite}
+                onOpenArticle={handleOpenArticle}
+              />
+            )}
+
+            {activeTab === 'favorites' && (
+              <FavoritesSection
+                favorites={favorites}
+                onRemove={removeFavorite}
+                onClearAll={handleClearAllFavorites}
+                onOpenArticle={handleOpenArticle}
+                onExploreNews={handleExploreNews}
+              />
+            )}
+          </Suspense>
+        </main>
+      </div>
+
+      {/* Bottom Navigation for Mobile */}
+      <div className="lg:hidden">
+        <BottomNav
+          activeTab={activeTab}
+          onTabChange={handleTabChange}
+          favoritesCount={favoritesCount}
+        />
+      </div>
 
       {/* Scroll to Top Button */}
       <ScrollToTopButton
@@ -165,7 +178,7 @@ function App() {
       />
 
       {/* Toast Notifications */}
-      <Toaster 
+      <Toaster
         position="top-center"
         toastOptions={{
           style: {

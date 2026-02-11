@@ -23,9 +23,9 @@ export const CategoryTabs = memo(function CategoryTabs({
   onCategoryChange,
 }: CategoryTabsProps) {
   return (
-    <div className="sticky top-14 z-40 w-full backdrop-blur-xl bg-white/80 dark:bg-slate-900/80 border-b border-slate-200/50 dark:border-slate-800/50 transition-all duration-300 supports-[backdrop-filter]:bg-white/60">
+    <div className="sticky top-14 z-40 w-full backdrop-blur-xl bg-white/80 dark:bg-slate-900/80 border-b border-slate-200/50 dark:border-slate-800/50 shadow-sm shadow-slate-200/20 dark:shadow-slate-900/20 transition-all duration-300 supports-[backdrop-filter]:bg-white/60">
       <div className="overflow-x-auto scrollbar-hide md:overflow-visible py-2">
-        <div className="flex items-center gap-2 px-4 min-w-max md:justify-center md:flex-wrap md:min-w-0 max-w-7xl mx-auto">
+        <div className="flex items-center gap-2 px-4 min-w-max md:min-w-0 md:w-full md:max-w-6xl md:mx-auto md:justify-center md:flex-wrap">
           {CATEGORIES.map((cat) => {
             const isActive = activeCategory === cat.value;
             const Icon = cat.icon;
@@ -44,11 +44,6 @@ export const CategoryTabs = memo(function CategoryTabs({
               >
                 <Icon className={`w-4 h-4 transition-transform duration-300 ${isActive ? 'scale-110' : ''}`} />
                 <span>{cat.label}</span>
-
-                {/* Active indicator animation */}
-                {isActive && (
-                  <span className="absolute inset-0 rounded-full bg-white/10 animate-pulse duration-1000" />
-                )}
               </button>
             );
           })}

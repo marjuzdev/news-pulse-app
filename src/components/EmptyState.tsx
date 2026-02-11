@@ -52,23 +52,23 @@ export const EmptyState = memo(function EmptyState({
   const Icon = config.icon;
 
   return (
-    <div className="flex flex-col items-center justify-center py-16 px-4 text-center">
+    <div className="flex-1 flex flex-col items-center justify-center py-8 px-6 text-center animate-fade-in-up w-full max-w-lg mx-auto min-h-[300px] sm:min-h-[400px]">
       {/* Icon */}
       <div className={`
-        w-20 h-20 rounded-2xl ${config.bgColor} 
-        flex items-center justify-center mb-6
-        animate-fade-in
+        w-20 h-20 sm:w-24 sm:h-24 rounded-3xl ${config.bgColor} 
+        flex items-center justify-center mb-6 sm:mb-8
+        shadow-sm ring-1 ring-slate-200/20
       `}>
-        <Icon className={`w-10 h-10 ${config.iconColor}`} />
+        <Icon className={`w-10 h-10 sm:w-12 sm:h-12 ${config.iconColor}`} />
       </div>
 
       {/* Title */}
-      <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-2">
+      <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-3">
         {config.title}
       </h3>
 
       {/* Description */}
-      <p className="text-sm text-slate-500 dark:text-slate-400 max-w-xs mb-6">
+      <p className="text-[14px] text-slate-500 dark:text-slate-400 max-w-[280px] mb-8 leading-relaxed">
         {message || config.description}
       </p>
 
@@ -76,8 +76,8 @@ export const EmptyState = memo(function EmptyState({
       {onAction && (
         <Button
           onClick={onAction}
-          variant="outline"
-          className="rounded-full px-6 border-slate-300 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800"
+          variant="default"
+          className="rounded-full px-8 h-12 font-semibold shadow-md shadow-blue-500/10 hover:shadow-lg hover:shadow-blue-500/20 transition-all active:scale-95"
         >
           {config.actionLabel}
         </Button>

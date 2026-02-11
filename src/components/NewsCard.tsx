@@ -1,7 +1,6 @@
 import { memo, useState, useCallback } from 'react';
-import { Heart, ExternalLink, Share2, Clock, Newspaper } from 'lucide-react';
+import { Heart, Share2, Newspaper } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
 import type { NewsArticle } from '@/types';
 
 interface NewsCardProps {
@@ -11,16 +10,6 @@ interface NewsCardProps {
   onOpen: (url: string) => void;
   index?: number;
 }
-
-const CATEGORY_COLORS: Record<string, string> = {
-  general: 'bg-slate-500',
-  business: 'bg-emerald-500',
-  entertainment: 'bg-pink-500',
-  health: 'bg-red-500',
-  science: 'bg-violet-500',
-  sports: 'bg-orange-500',
-  technology: 'bg-blue-500',
-};
 
 const CATEGORY_LABELS: Record<string, string> = {
   general: 'General',
@@ -57,6 +46,17 @@ export const NewsCard = memo(function NewsCard({
 }: NewsCardProps) {
   const [imageLoaded, setImageLoaded] = useState(false);
   const [imageError, setImageError] = useState(false);
+  const [ripple, setRipple] = useState<{ x: number; y: number; show: boolean }>({ x: 0, y: 0, show: false });
+
+  const handleRipple = (e: React.MouseEvent<HTMLElement>) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    setRipple({
+      x: e.clientX - rect.left,
+      y: e.clientY - rect.top,
+      show: true,
+    });
+    setTimeout(() => setRipple(prev => ({ ...prev, show: false })), 600);
+  };
 
   const handleFavoriteClick = useCallback((e: React.MouseEvent) => {
     e.stopPropagation();
@@ -90,7 +90,6 @@ export const NewsCard = memo(function NewsCard({
     onOpen(article.url);
   }, [article.url, onOpen]);
 
-  const categoryColor = CATEGORY_COLORS[article.category] || 'bg-slate-500';
   const categoryLabel = CATEGORY_LABELS[article.category] || article.category;
 
   // Staggered animation delay based on index
@@ -98,109 +97,93 @@ export const NewsCard = memo(function NewsCard({
 
   return (
     <article
-      className="group relative bg-white dark:bg-slate-800/50 rounded-xl overflow-hidden border border-slate-100 dark:border-slate-800 shadow-sm hover:shadow-xl hover:shadow-indigo-500/10 dark:hover:shadow-indigo-900/10 transition-all duration-300 cursor-pointer animate-fade-in-up flex flex-col h-full hover:-translate-y-1"
+      className="group relative bg-white dark:bg-slate-900 rounded-[28px] overflow-hidden border border-slate-200/80 dark:border-slate-800/60 transition-all duration-300 cursor-pointer animate-fade-in-up flex flex-col h-full active:scale-[0.98] shadow-sm hover:shadow-md hover:border-blue-200 dark:hover:border-blue-900/40"
       style={{ animationDelay: `${animationDelay}ms` }}
-      onClick={handleOpen}
+      onClick={(e) => {
+        handleRipple(e);
+        handleOpen();
+      }}
     >
+      {/* Ripple Element */}
+      {ripple.show && (
+        <span
+          className="absolute bg-slate-400/20 dark:bg-slate-300/10 rounded-full animate-ripple pointer-events-none z-10"
+          style={{
+            left: ripple.x,
+            top: ripple.y,
+            width: '10px',
+            height: '10px',
+            marginLeft: '-5px',
+            marginTop: '-5px',
+            transformOrigin: 'center center',
+          }}
+        />
+      )}
+
       {/* Image Container */}
-      <div className="relative h-48 overflow-hidden bg-slate-100 dark:bg-slate-800 flex-shrink-0">
+      <div className="relative w-full aspect-[16/9] overflow-hidden bg-slate-100 dark:bg-slate-800 flex-shrink-0">
         {!imageLoaded && !imageError && (
-          <div className="absolute inset-0 animate-pulse bg-slate-200 dark:bg-slate-700" />
+          <div className="w-full h-full animate-pulse bg-slate-200 dark:bg-slate-700" />
         )}
         {imageError ? (
-          <div className="absolute inset-0 flex items-center justify-center bg-slate-100 dark:bg-slate-800">
-            <Newspaper className="w-10 h-10 text-slate-300 dark:text-slate-600" />
+          <div className="w-full h-full flex items-center justify-center bg-slate-100 dark:bg-slate-800">
+            <Newspaper className="w-12 h-12 text-slate-300 dark:text-slate-600" />
           </div>
         ) : (
           <img
             src={article.imageUrl}
             alt={article.title}
             loading="lazy"
-            decoding="async"
-            className={`
-              w-full h-full object-cover transition-transform duration-700 group-hover:scale-105
-              ${imageLoaded ? 'opacity-100' : 'opacity-0'}
-            `}
+            className={`w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 ${imageLoaded ? 'opacity-100' : 'opacity-0'}`}
             onLoad={() => setImageLoaded(true)}
             onError={() => setImageError(true)}
           />
         )}
-
-        {/* Category Badge - Floating with subtle shadow */}
-        <div className="absolute top-3 left-3">
-          <Badge className={`${categoryColor} text-white text-[10px] font-bold px-2 py-0.5 shadow-md backdrop-blur-sm border-0 tracking-wide uppercase`}>
-            {categoryLabel}
-          </Badge>
-        </div>
-
-        {/* Favorite Button - polished */}
-        <Button
-          variant="ghost"
-          size="icon"
-          onClick={handleFavoriteClick}
-          className={`
-            absolute top-3 right-3 w-8 h-8 rounded-full backdrop-blur-md border border-white/10
-            transition-all duration-200 active:scale-90
-            ${isFavorite
-              ? 'bg-red-500/90 text-white hover:bg-red-600 shadow-lg shadow-red-500/20'
-              : 'bg-black/20 text-white hover:bg-black/40 hover:backdrop-blur-lg'
-            }
-          `}
-        >
-          <Heart className={`w-3.5 h-3.5 transition-transform duration-300 ${isFavorite ? 'fill-current scale-110' : ''}`} />
-        </Button>
       </div>
 
-      {/* Content */}
-      <div className="p-3.5 flex flex-col flex-1">
-        {/* Source & Time */}
-        <div className="flex items-center gap-2 text-[11px] text-slate-400 dark:text-slate-500 mb-1.5 font-medium tracking-tight">
-          <span className="text-slate-600 dark:text-slate-300 uppercase">
-            {article.source.name}
-          </span>
-          <span className="w-0.5 h-0.5 rounded-full bg-slate-300 dark:bg-slate-600" />
-          <div className="flex items-center gap-1">
-            <Clock className="w-3 h-3" />
-            <span>{formatTimeAgo(article.publishedAt)}</span>
+      <div className="flex flex-col p-3.5 pt-2.5 flex-1">
+        {/* Source Section */}
+        <div className="flex items-center justify-between mb-2">
+          <div className="flex items-center gap-2">
+            <div className="w-5 h-5 rounded-md bg-slate-100 dark:bg-slate-800 flex items-center justify-center overflow-hidden border border-slate-200 dark:border-slate-700/50">
+              <span className="text-[10px] font-bold text-slate-500 uppercase">{article.source.name.charAt(0)}</span>
+            </div>
+            <span className="text-[11px] font-semibold text-slate-500 dark:text-slate-400 truncate max-w-[150px]">
+              {article.source.name}
+            </span>
+          </div>
+
+          <div className="flex items-center gap-0.5">
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={handleShare}
+              className="w-8 h-8 rounded-full text-slate-400 hover:text-blue-500 hover:bg-blue-50 dark:hover:bg-blue-900/20 z-20 transition-colors"
+            >
+              <Share2 className="w-4 h-4" />
+            </Button>
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={handleFavoriteClick}
+              className={`w-8 h-8 rounded-full transition-all duration-200 z-20 ${isFavorite ? 'text-red-500 hover:bg-red-50 dark:hover:bg-red-950/30' : 'text-slate-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-950/10'
+                }`}
+            >
+              <Heart className={`w-4 h-4 ${isFavorite ? 'fill-current' : ''}`} />
+            </Button>
           </div>
         </div>
 
         {/* Title */}
-        <h3 className="font-bold text-slate-900 dark:text-white text-[15px] leading-snug line-clamp-2 mb-1.5 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+        <h3 className="font-bold text-slate-900 dark:text-white text-[16px] leading-relaxed mb-2.5 line-clamp-3 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
           {article.title}
         </h3>
 
-        {/* Description */}
-        <p className="text-xs text-slate-500 dark:text-slate-400 line-clamp-2 mb-3 leading-relaxed">
-          {article.description}
-        </p>
-
-        {/* Actions - minimalistic */}
-        <div className="mt-auto flex items-center justify-end pt-2 border-t border-slate-50 dark:border-slate-800/50">
-          <div className="flex items-center gap-1">
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={handleShare}
-              className="h-7 w-7 rounded-full p-0 text-slate-400 hover:text-slate-700 hover:bg-slate-100 dark:text-slate-500 dark:hover:text-slate-300 dark:hover:bg-slate-800"
-              title="Compartir"
-            >
-              <Share2 className="w-3.5 h-3.5" />
-            </Button>
-
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={(e) => {
-                e.stopPropagation();
-                handleOpen();
-              }}
-              className="h-7 px-2 text-blue-600 hover:text-blue-700 hover:bg-blue-50 dark:text-blue-400 dark:hover:text-blue-300 dark:hover:bg-blue-900/20 text-xs font-medium rounded-full ml-1"
-            >
-              <span>Leer</span>
-              <ExternalLink className="w-3 h-3 ml-1" />
-            </Button>
-          </div>
+        {/* Meta Info */}
+        <div className="mt-auto flex items-center gap-2 text-[12px] text-slate-500 dark:text-slate-400 font-medium">
+          <span className="whitespace-nowrap">{formatTimeAgo(article.publishedAt)}</span>
+          <span className="w-1 h-1 rounded-full bg-slate-300 dark:bg-slate-700" />
+          <span className="text-blue-600/90 dark:text-blue-400/90 uppercase tracking-tight text-[11px] font-bold">{categoryLabel}</span>
         </div>
       </div>
     </article>

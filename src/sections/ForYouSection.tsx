@@ -51,66 +51,79 @@ export const ForYouSection = memo(function ForYouSection({
   }
 
   return (
-    <div className="space-y-4">
-      {/* Header */}
-      <div className="flex items-center justify-between px-4 py-2">
-        <div className="flex items-center gap-2">
-          <Sparkles className="w-5 h-5 text-amber-500" />
-          <h2 className="font-semibold text-slate-900 dark:text-white">
-            Para ti
-          </h2>
-          <span className="text-xs text-slate-500 dark:text-slate-400">
-            Basado en {interests.length} intereses
-          </span>
+    <div className="space-y-6 pb-20">
+      <div className="max-w-6xl mx-auto space-y-6">
+        {/* Header */}
+        <div className="flex items-center justify-between px-4 sm:px-6 pt-2">
+          <div className="flex items-center gap-2">
+            <Sparkles className="w-5 h-5 text-amber-500" />
+            <h2 className="font-bold text-slate-900 dark:text-white text-lg">
+              Para ti
+            </h2>
+            <span className="text-xs text-slate-500 dark:text-slate-400 font-medium">
+              Basado en {interests.length} intereses
+            </span>
+          </div>
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={handleRefresh}
+            disabled={loading}
+            className="h-9 px-3 text-slate-600 hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-200 bg-slate-100/50 dark:bg-slate-800/50 rounded-full transition-all"
+          >
+            <RefreshCw className={`w-4 h-4 mr-2 ${loading ? 'animate-spin' : ''}`} />
+            <span className="text-xs font-semibold">Actualizar</span>
+          </Button>
         </div>
-        <Button
-          variant="ghost"
-          size="sm"
-          onClick={handleRefresh}
-          disabled={loading}
-          className="h-8 px-2 text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200"
-        >
-          <RefreshCw className={`w-4 h-4 mr-1 ${loading ? 'animate-spin' : ''}`} />
-          <span className="text-xs">Actualizar</span>
-        </Button>
-      </div>
 
-      {/* News Grid */}
-      <div className="px-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {articles.map((article, index) => (
-          <NewsCard
-            key={article.id}
-            article={article}
-            isFavorite={isFavorite(article.id)}
-            onToggleFavorite={onToggleFavorite}
-            onOpen={onOpenArticle}
-            index={index}
-          />
-        ))}
+        {/* News Grid */}
+        {articles.length > 0 && (
+          <div className="px-4 sm:px-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-6">
+            {articles.map((article, index) => (
+              <NewsCard
+                key={article.id}
+                article={article}
+                isFavorite={isFavorite(article.id)}
+                onToggleFavorite={onToggleFavorite}
+                onOpen={onOpenArticle}
+                index={index}
+              />
+            ))}
 
-        {/* Loading Skeletons */}
-        {loading && (
-          <SkeletonCard count={3} />
-        )}
+            {/* Loading Skeletons */}
+            {loading && (
+              <SkeletonCard count={3} />
+            )}
 
-        {/* Load More Sentinel */}
-        {hasMore && !loading && (
-          <div ref={sentinelRef} className="h-4" />
-        )}
-
-        {/* End of List */}
-        {!hasMore && articles.length > 0 && (
-          <div className="text-center py-8 text-sm text-slate-500 dark:text-slate-400">
-            No hay más noticias
+            {/* Load More Sentinel */}
+            {hasMore && !loading && (
+              <div ref={sentinelRef} className="h-4" />
+            )}
           </div>
         )}
 
         {/* Empty State */}
-        {!loading && articles.length === 0 && (
-          <EmptyState
-            type="no-results"
-            onAction={handleRefresh}
-          />
+        {!loading && articles.length === 0 && interests.length > 0 && (
+          <div className="flex flex-col items-center justify-center px-4 py-12">
+            <EmptyState
+              type="no-results"
+              onAction={handleRefresh}
+            />
+          </div>
+        )}
+
+        {/* Initial Loading Skeletons */}
+        {loading && articles.length === 0 && (
+          <div className="px-4 sm:px-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-6">
+            <SkeletonCard count={6} />
+          </div>
+        )}
+
+        {/* End of List */}
+        {!hasMore && articles.length > 0 && (
+          <div className="text-center py-12 text-sm text-slate-400 dark:text-slate-500 font-medium">
+            Es todo por ahora
+          </div>
         )}
       </div>
     </div>

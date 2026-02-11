@@ -33,7 +33,7 @@ export const Header = memo(function Header({
 }: HeaderProps) {
   return (
     <header className="sticky top-0 z-50 w-full backdrop-blur-xl bg-white/80 dark:bg-slate-900/80 border-b border-slate-200 dark:border-slate-800 transition-colors duration-300">
-      <div className="flex items-center justify-between h-14 px-4 max-w-7xl mx-auto">
+      <div className="flex items-center justify-between h-14 px-4 sm:px-6 max-w-6xl mx-auto">
         {/* Logo */}
         <div className="flex items-center gap-2">
           <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center shadow-lg shadow-blue-500/20">
@@ -51,16 +51,16 @@ export const Header = memo(function Header({
             variant="ghost"
             size="icon"
             onClick={onToggleTheme}
-            className="relative w-10 h-10 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+            className="flex items-center justify-center w-10 h-10 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
             aria-label={isDark ? 'Cambiar a modo claro' : 'Cambiar a modo oscuro'}
           >
-            <div className="relative w-5 h-5">
+            <div className="relative w-5 h-5 flex items-center justify-center">
               <Sun
-                className={`absolute inset-0 w-5 h-5 text-amber-500 transition-all duration-300 ${isDark ? 'opacity-0 rotate-90 scale-0' : 'opacity-100 rotate-0 scale-100'
+                className={`absolute w-5 h-5 text-amber-500 transition-all duration-300 ${isDark ? 'opacity-0 rotate-90 scale-0' : 'opacity-100 rotate-0 scale-100'
                   }`}
               />
               <Moon
-                className={`absolute inset-0 w-5 h-5 text-indigo-400 transition-all duration-300 ${isDark ? 'opacity-100 rotate-0 scale-100' : 'opacity-0 -rotate-90 scale-0'
+                className={`absolute w-5 h-5 text-indigo-400 transition-all duration-300 ${isDark ? 'opacity-100 rotate-0 scale-100' : 'opacity-0 -rotate-90 scale-0'
                   }`}
               />
             </div>
@@ -73,7 +73,7 @@ export const Header = memo(function Header({
                 variant="ghost"
                 size="icon"
                 data-settings-trigger
-                className="relative w-10 h-10 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+                className="flex items-center justify-center w-10 h-10 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
               >
                 <Settings className="w-5 h-5 text-slate-600 dark:text-slate-400" />
               </Button>
