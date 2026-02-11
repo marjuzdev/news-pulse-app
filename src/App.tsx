@@ -171,7 +171,7 @@ function App() {
         </div>
 
         {/* Main Content */}
-        <main className="flex-1 lg:pt-14 pb-20 lg:pb-8 lg:ml-[72px] xl:ml-64">
+        <main className="flex-1 lg:pt-14 pb-20 lg:pb-8 lg:ml-[72px] xl:ml-64 w-full">
           <Suspense fallback={<SectionLoader />}>
             {activeTab === 'foryou' && (
               <ForYouSection
