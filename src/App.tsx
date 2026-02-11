@@ -94,17 +94,59 @@ function App() {
     }
   }, []);
 
-  // Register service worker
+  // Register service worker and handle installation
   useEffect(() => {
+    // Service Worker Registration
     if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('./sw.js')
-        .then((registration) => {
-          console.log('SW registered:', registration);
-        })
-        .catch((error) => {
-          console.log('SW registration failed:', error);
-        });
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js')
+          .then((registration) => {
+            console.log('SW registered:', registration);
+          })
+          .catch((error) => {
+            console.error('SW registration failed:', error);
+          });
+      });
     }
+
+    // PWA Install Prompt handling
+    const handleBeforeInstallPrompt = (e: any) => {
+      // Prevent the mini-infobar from appearing on mobile
+      e.preventDefault();
+      // Store the event so it can be triggered later
+      (window as any).deferredPrompt = e;
+
+      // Optionally show a custom toast or button to invite the user to install
+      console.log('PWA installation candidate.');
+
+      toast('¿Quieres instalar News Pulse?', {
+        description: 'Accede más rápido y lee sin conexión.',
+        action: {
+          label: 'Instalar',
+          onClick: () => {
+            const promptEvent = (window as any).deferredPrompt;
+            if (promptEvent) {
+              promptEvent.prompt();
+              promptEvent.userChoice.then((choiceResult: any) => {
+                if (choiceResult.outcome === 'accepted') {
+                  console.log('User accepted the install prompt');
+                } else {
+                  console.log('User dismissed the install prompt');
+                }
+                (window as any).deferredPrompt = null;
+              });
+            }
+          },
+        },
+        duration: 10000,
+      });
+    };
+
+    window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
+
+    return () => {
+      window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
+    };
   }, []);
 
   return (
